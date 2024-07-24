@@ -48,9 +48,14 @@ function orderCar(carName) {
 }
 
 function displayUserInfo() {
-    const usercard = document.getElementById("usercard");
-    const p = document.createElement("p");
-    p.innerText = `${tg.initDataUnsafe.user.first_name} ${tg.initDataUnsafe.user.last_name}`;
-    usercard.appendChild(p);
-    console.log("User info displayed: ", tg.initDataUnsafe.user);
+    const user = tg.initDataUnsafe.user;
+    if (user) {
+        const usercard = document.getElementById("usercard");
+        const p = document.createElement("p");
+        p.innerText = `${user.first_name} ${user.last_name}`;
+        usercard.appendChild(p);
+        console.log("User info displayed: ", user);
+    } else {
+        console.error("User information is not available.");
+    }
 }
