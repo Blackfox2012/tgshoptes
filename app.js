@@ -1,6 +1,15 @@
+const tg = window.Telegram.WebApp;
+
 document.addEventListener("DOMContentLoaded", function() {
     showTab('stock'); // Default to 'Cars in Stock' tab
+    displayUserInfo(); // Display user info on page load
+
+    tg.MainButton.onClick(function() {
+        tg.sendData(selectedCar); // send selected car data to the bot
+    });
 });
+
+let selectedCar = '';
 
 function showTab(tabName) {
     var i;
@@ -12,8 +21,14 @@ function showTab(tabName) {
 }
 
 function orderCar(carName) {
-    // Implement the logic to redirect to the manager
-    alert("Ordering " + carName);
-    // For example, redirect to a manager's contact form or send a message
-    // window.location.href = "manager.html?car=" + encodeURIComponent(carName);
+    selectedCar = carName;
+    tg.MainButton.setText(`Order ${carName}`);
+    tg.MainButton.show();
+}
+
+function displayUserInfo() {
+    let usercard = document.getElementById("usercard");
+    let p = document.createElement("p");
+    p.innerText = `${tg.initDataUnsafe.user.first_name} ${tg.initDataUnsafe.user.last_name}`;
+    usercard.appendChild(p);
 }
