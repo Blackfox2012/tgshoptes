@@ -1,45 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="style.css">
-	<title>Document</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Car Inventory</title>
 </head>
 <body>
-	<div class="container">
-		<div class="inner">
-			<div class="item">
-				<img src="1.png" alt="" class="img">
-				<button class="btn" id="btn1">Add</button>
-			</div>
-			<div class="item">
-				<img src="1.png" alt="" class="img">
-				<button class="btn" id="btn2">Add</button>
-			</div>
-			<div class="item">
-				<img src="1.png" alt="" class="img">
-				<button class="btn" id="btn3">Add</button>
-			</div>
-			<div class="item">
-				<img src="1.png" alt="" class="img">
-				<button class="btn" id="btn4">Add</button>
-			</div>
-			<div class="item">
-				<img src="1.png" alt="" class="img">
-				<button class="btn" id="btn5">Add</button>
-			</div>
-			<div class="item">
-				<img src="1.png" alt="" class="img">
-				<button class="btn" id="btn6">Add</button>
-			</div>
-		</div>
-	</div>
-	<div class="usercard" id="usercard">
-		
-	</div>
+    <div class="tab-container">
+        <button class="tab-button" onclick="showTab('stock')">Cars in Stock</button>
+        <button class="tab-button" onclick="showTab('order')">Cars to Order</button>
+    </div>
+    
+    <div id="stock" class="tab-content">
+        <div class="container">
+            <div class="inner">
+                <div class="item">
+                    <img src="car1.jpg" alt="Car 1" class="img">
+                    <button class="btn" onclick="orderCar('Car 1')">Order</button>
+                </div>
+                <div class="item">
+                    <img src="car2.jpg" alt="Car 2" class="img">
+                    <button class="btn" onclick="orderCar('Car 2')">Order</button>
+                </div>
+                <!-- More car items in stock -->
+            </div>
+        </div>
+    </div>
 
-	<script src="https://telegram.org/js/telegram-web-app.js"></script>
-	<script src="app.js"></script>
+    <div id="order" class="tab-content" style="display:none;">
+        <div class="container">
+            <div class="inner">
+                <div class="item">
+                    <img src="car3.jpg" alt="Car 3" class="img">
+                    <button class="btn" onclick="orderCar('Car 3')">Order</button>
+                </div>
+                <div class="item">
+                    <img src="car4.jpg" alt="Car 4" class="img">
+                    <button class="btn" onclick="orderCar('Car 4')">Order</button>
+                </div>
+                <!-- More car items to order -->
+            </div>
+        </div>
+    </div>
+
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>

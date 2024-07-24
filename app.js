@@ -1,104 +1,19 @@
-let tg = window.Telegram.WebApp;
-
-tg.expand();
-
-tg.MainButton.textColor = '#FFFFFF';
-tg.MainButton.color = '#2cab37';
-
-let item = "";
-
-let btn1 = document.getElementById("btn1");
-let btn2 = document.getElementById("btn2");
-let btn3 = document.getElementById("btn3");
-let btn4 = document.getElementById("btn4");
-let btn5 = document.getElementById("btn5");
-let btn6 = document.getElementById("btn6");
-
-btn1.addEventListener("click", function(){
-	if (tg.MainButton.isVisible) {
-		tg.MainButton.hide();
-	}
-	else {
-		tg.MainButton.setText("Вы выбрали товар 1!");
-		item = "1";
-		tg.MainButton.show();
-	}
+document.addEventListener("DOMContentLoaded", function() {
+    showTab('stock'); // Default to 'Cars in Stock' tab
 });
 
-btn2.addEventListener("click", function(){
-	if (tg.MainButton.isVisible) {
-		tg.MainButton.hide();
-	}
-	else {
-		tg.MainButton.setText("Вы выбрали товар 2!");
-		item = "2";
-		tg.MainButton.show();
-	}
-});
+function showTab(tabName) {
+    var i;
+    var tabContent = document.getElementsByClassName("tab-content");
+    for (i = 0; i < tabContent.length; i++) {
+        tabContent[i].style.display = "none";
+    }
+    document.getElementById(tabName).style.display = "block";
+}
 
-btn3.addEventListener("click", function(){
-	if (tg.MainButton.isVisible) {
-		tg.MainButton.hide();
-	}
-	else {
-		tg.MainButton.setText("Вы выбрали товар 3!");
-		item = "3";
-		tg.MainButton.show();
-	}
-});
-
-btn4.addEventListener("click", function(){
-	if (tg.MainButton.isVisible) {
-		tg.MainButton.hide();
-	}
-	else {
-		tg.MainButton.setText("Вы выбрали товар 4!");
-		item = "4";
-		tg.MainButton.show();
-	}
-});
-
-btn5.addEventListener("click", function(){
-	if (tg.MainButton.isVisible) {
-		tg.MainButton.hide();
-	}
-	else {
-		tg.MainButton.setText("Вы выбрали товар 5!");
-		item = "5";
-		tg.MainButton.show();
-	}
-});
-
-btn6.addEventListener("click", function(){
-	if (tg.MainButton.isVisible) {
-		tg.MainButton.hide();
-	}
-	else {
-		tg.MainButton.setText("Вы выбрали товар 6!");
-		item = "6";
-		tg.MainButton.show();
-	}
-});
-
-
-Telegram.WebApp.onEvent("mainButtonClicked", function(){
-	tg.sendData(item);
-});
-
-
-let usercard = document.getElementById("usercard");
-
-let p = document.createElement("p");
-
-p.innerText = `${tg.initDataUnsafe.user.first_name}
-${tg.initDataUnsafe.user.last_name}`;
-
-usercard.appendChild(p);
-
-
-
-
-
-
-
-
+function orderCar(carName) {
+    // Implement the logic to redirect to the manager
+    alert("Ordering " + carName);
+    // For example, redirect to a manager's contact form or send a message
+    // window.location.href = "manager.html?car=" + encodeURIComponent(carName);
+}
