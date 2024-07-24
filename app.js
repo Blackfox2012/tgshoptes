@@ -4,17 +4,18 @@ document.addEventListener("DOMContentLoaded", function() {
     showTab('stock'); // Default to 'Cars in Stock' tab
     displayUserInfo(); // Display user info on page load
 
-    tg.MainButton.onClick(function() {
-        tg.sendData(selectedCar); // send selected car data to the bot
+    tg.onEvent('mainButtonClicked', function() {
+        if (selectedCar) {
+            tg.sendData(selectedCar); // send selected car data to the bot
+        }
     });
 });
 
 let selectedCar = '';
 
 function showTab(tabName) {
-    var i;
-    var tabContent = document.getElementsByClassName("tab-content");
-    for (i = 0; i < tabContent.length; i++) {
+    const tabContent = document.getElementsByClassName("tab-content");
+    for (let i = 0; i < tabContent.length; i++) {
         tabContent[i].style.display = "none";
     }
     document.getElementById(tabName).style.display = "block";
@@ -27,8 +28,8 @@ function orderCar(carName) {
 }
 
 function displayUserInfo() {
-    let usercard = document.getElementById("usercard");
-    let p = document.createElement("p");
+    const usercard = document.getElementById("usercard");
+    const p = document.createElement("p");
     p.innerText = `${tg.initDataUnsafe.user.first_name} ${tg.initDataUnsafe.user.last_name}`;
     usercard.appendChild(p);
 }
