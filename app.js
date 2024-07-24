@@ -48,8 +48,8 @@ function orderCar(carName) {
 }
 
 function displayUserInfo() {
-    const user = tg.initDataUnsafe.user;
-    if (user) {
+    if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+        const user = tg.initDataUnsafe.user;
         const usercard = document.getElementById("usercard");
         const p = document.createElement("p");
         p.innerText = `${user.first_name} ${user.last_name}`;
