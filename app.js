@@ -1,23 +1,31 @@
-const tg = window.Telegram.WebApp;
+let tg = window.Telegram.WebApp;
+
+tg.expand();
+
+tg.MainButton.textColor = '#FFFFFF';
+tg.MainButton.color = '#2cab37';
+
+let item = "";
 
 document.addEventListener("DOMContentLoaded", function() {
     console.log("Document loaded");
     showTab('stock'); // Default to 'Cars in Stock' tab
     displayUserInfo(); // Display user info on page load
 
+    // Add event listeners for each button
+    document.getElementById("btn1").addEventListener("click", () => orderCar('Car 1'));
+    document.getElementById("btn2").addEventListener("click", () => orderCar('Car 2'));
+    document.getElementById("btn3").addEventListener("click", () => orderCar('Car 3'));
+    document.getElementById("btn4").addEventListener("click", () => orderCar('Car 4'));
+
     tg.onEvent('mainButtonClicked', function() {
         console.log("Main button clicked");
-        if (selectedCar) {
-            console.log("Sending data: ", selectedCar);
-            tg.sendData(selectedCar); // send selected car data to the bot
+        if (item) {
+            console.log("Sending data: ", item);
+            tg.sendData(item); // send selected car data to the bot
         }
     });
-
-    // Additional logging for initialization
-    console.log("Telegram WebApp initialized: ", tg.initDataUnsafe);
 });
-
-let selectedCar = '';
 
 function showTab(tabName) {
     const tabContent = document.getElementsByClassName("tab-content");
@@ -29,10 +37,14 @@ function showTab(tabName) {
 }
 
 function orderCar(carName) {
-    selectedCar = carName;
-    tg.MainButton.setText(`Order ${carName}`);
-    tg.MainButton.show();
-    console.log("Car selected: ", carName);
+    if (tg.MainButton.isVisible) {
+        tg.MainButton.hide();
+    } else {
+        tg.MainButton.setText(`You selected ${carName}!`);
+        item = carName;
+        tg.MainButton.show();
+        console.log("Car selected: ", carName);
+    }
 }
 
 function displayUserInfo() {
