@@ -1,52 +1,344 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <title>Car Inventory</title>
+    <title>Автомагазин</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+            color: #000;
+        }
+        #usercard {
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #ddd;
+            border: none;
+            outline: none;
+        }
+        .tab.active {
+            background-color: #3498db;
+            color: white;
+        }
+        .car-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .car-card {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .car-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        button {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .fullscreen-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .fullscreen-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            color: #000;
+            overflow-y: auto;
+        }
+        .close-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 30px;
+            color: #000;
+            cursor: pointer;
+            z-index: 1001;
+        }
+        .gallery {
+            width: 100%;
+            max-width: 600px;
+            height: 300px;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .gallery-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .gallery-image.active {
+            opacity: 1;
+        }
+        .gallery-nav {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .gallery-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: rgba(0,0,0,0.5);
+            margin: 0 5px;
+            cursor: pointer;
+        }
+        .gallery-dot.active {
+            background-color: #000;
+        }
+        .car-details {
+            max-width: 600px;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
-    <div class="tab-container">
-        <button class="tab-button" onclick="showTab('stock')">Cars in Stock</button>
-        <button class="tab-button" onclick="showTab('order')">Cars to Order</button>
-    </div>
-    
-    <div id="stock" class="tab-content">
-        <div class="container">
-            <div class="inner">
-                <div class="item">
-                    <img src="car1.jpg" alt="Car 1" class="img">
-                    <button class="btn" id="btn1">Order</button>
-                </div>
-                <div class="item">
-                    <img src="car2.jpg" alt="Car 2" class="img">
-                    <button class="btn" id="btn2">Order</button>
-                </div>
-                <!-- More car items in stock -->
+    <div id="usercard"></div>
+    <div id="app">
+        <h1>Автомагазин</h1>
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('available')">Доступные автомобили</button>
+            <button class="tab" onclick="showTab('order')">Автомобили под заказ</button>
+        </div>
+        <div id="availableCars" class="car-grid">
+            <div class="car-card">
+                <div class="car-title">Автомобиль 1</div>
+                <button onclick="showDetails('car1')">Подробнее</button>
+                <button onclick="orderCar('Автомобиль 1', 'car1')">Заказать</button>
+            </div>
+            <div class="car-card">
+                <div class="car-title">Автомобиль 2</div>
+                <button onclick="showDetails('car2')">Подробнее</button>
+                <button onclick="orderCar('Автомобиль 2', 'car2')">Заказать</button>
+            </div>
+        </div>
+        <div id="orderCars" class="car-grid" style="display: none;">
+            <div class="car-card">
+                <div class="car-title">Автомобиль 3 (под заказ)</div>
+                <button onclick="showDetails('car3')">Подробнее</button>
+                <button onclick="orderCar('Автомобиль 3', 'car3')">Заказать</button>
             </div>
         </div>
     </div>
 
-    <div id="order" class="tab-content" style="display:none;">
-        <div class="container">
-            <div class="inner">
-                <div class="item">
-                    <img src="car3.jpg" alt="Car 3" class="img">
-                    <button class="btn" id="btn3">Order</button>
-                </div>
-                <div class="item">
-                    <img src="car4.jpg" alt="Car 4" class="img">
-                    <button class="btn" id="btn4">Order</button>
-                </div>
-                <!-- More car items to order -->
+    <div id="fullscreenOverlay" class="fullscreen-overlay">
+        <span class="close-button" onclick="closeDetails()">&times;</span>
+        <div class="fullscreen-content">
+            <div class="gallery" id="gallery">
+                <!-- Images will be inserted here -->
             </div>
+            <div class="gallery-nav" id="galleryNav">
+                <!-- Navigation dots will be inserted here -->
+            </div>
+            <h2 id="carTitle"></h2>
+            <div id="carDetails" class="car-details"></div>
         </div>
     </div>
-    
-    <div class="usercard" id="usercard"></div>
 
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src="app.js"></script>
+    <script>
+        let tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.MainButton.textColor = '#FFFFFF';
+        tg.MainButton.color = '#2cab37';
+        let selectedCar = "";
+        let currentImageIndex = 0;
+
+        const carDetails = {
+            car1: {
+                title: "Автомобиль 1",
+                images: ["car1_1.jpg", "car1_2.jpg", "car1_3.jpg"],
+                details: `
+                    <p>Год: 2023</p>
+                    <p>Страна: Германия</p>
+                    <p>Пробег: 0 км</p>
+                    <p>Доставка: В наличии</p>
+                    <p>Двигатель: 2.0 л, 250 л.с.</p>
+                    <p>Расход топлива: 7.5 л/100 км</p>
+                    <p>Комплектация: Люкс</p>
+                `
+            },
+            car2: {
+                title: "Автомобиль 2",
+                images: ["car2_1.jpg", "car2_2.jpg", "car2_3.jpg"],
+                details: `
+                    <p>Год: 2022</p>
+                    <p>Страна: Япония</p>
+                    <p>Пробег: 5000 км</p>
+                    <p>Доставка: В наличии</p>
+                    <p>Двигатель: 1.8 л, 180 л.с.</p>
+                    <p>Расход топлива: 6.8 л/100 км</p>
+                    <p>Комплектация: Стандарт</p>
+                `
+            },
+            car3: {
+                title: "Автомобиль 3 (под заказ)",
+                images: ["car3_1.jpg", "car3_2.jpg", "car3_3.jpg"],
+                details: `
+                    <p>Год: 2024</p>
+                    <p>Страна: США</p>
+                    <p>Пробег: 0 км</p>
+                    <p>Доставка: 4-6 недель</p>
+                    <p>Двигатель: 3.0 л, 400 л.с.</p>
+                    <p>Расход топлива: 9.0 л/100 км</p>
+                    <p>Комплектация: Премиум</p>
+                `
+            }
+        };
+
+        function showTab(tabName) {
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+
+            document.getElementById('availableCars').style.display = tabName === 'available' ? 'flex' : 'none';
+            document.getElementById('orderCars').style.display = tabName === 'order' ? 'flex' : 'none';
+        }
+
+        function showDetails(carId) {
+            const car = carDetails[carId];
+            document.getElementById('carTitle').textContent = car.title;
+            document.getElementById('carDetails').innerHTML = car.details;
+            
+            const gallery = document.getElementById('gallery');
+            const galleryNav = document.getElementById('galleryNav');
+            gallery.innerHTML = '';
+            galleryNav.innerHTML = '';
+            
+            car.images.forEach((img, index) => {
+                const imgElement = document.createElement('img');
+                imgElement.src = img;
+                imgElement.alt = `${car.title} image ${index + 1}`;
+                imgElement.classList.add('gallery-image');
+                if (index === 0) imgElement.classList.add('active');
+                gallery.appendChild(imgElement);
+
+                const dot = document.createElement('div');
+                dot.classList.add('gallery-dot');
+                if (index === 0) dot.classList.add('active');
+                dot.onclick = () => changeImage(index);
+                galleryNav.appendChild(dot);
+            });
+
+            const overlay = document.getElementById('fullscreenOverlay');
+            overlay.style.display = 'block';
+            setTimeout(() => {
+                overlay.style.opacity = '1';
+            }, 10);
+
+            currentImageIndex = 0;
+            setupSwipe();
+        }
+
+        function closeDetails() {
+            const overlay = document.getElementById('fullscreenOverlay');
+            overlay.style.opacity = '0';
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 300);
+        }
+
+        function orderCar(carName, carId) {
+            selectedCar = carId;
+            if (tg.MainButton.isVisible) {
+                tg.MainButton.hide();
+            } else {
+                tg.MainButton.setText(`Заказать ${carName}`);
+                tg.MainButton.show();
+            }
+        }
+
+        function changeImage(index) {
+            const images = document.querySelectorAll('.gallery-image');
+            const dots = document.querySelectorAll('.gallery-dot');
+            
+            images[currentImageIndex].classList.remove('active');
+            dots[currentImageIndex].classList.remove('active');
+            
+            currentImageIndex = index;
+            
+            images[currentImageIndex].classList.add('active');
+            dots[currentImageIndex].classList.add('active');
+        }
+
+        function setupSwipe() {
+            const gallery = document.getElementById('gallery');
+            let startX;
+            let endX;
+
+            gallery.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].clientX;
+            });
+
+            gallery.addEventListener('touchend', (e) => {
+                endX = e.changedTouches[0].clientX;
+                handleSwipe();
+            });
+
+            function handleSwipe() {
+                const images = document.querySelectorAll('.gallery-image');
+                if (startX - endX > 50 && currentImageIndex < images.length - 1) {
+                    changeImage(currentImageIndex + 1);
+                } else if (endX - startX > 50 && currentImageIndex > 0) {
+                    changeImage(currentImageIndex - 1);
+                }
+            }
+        }
+
+        Telegram.WebApp.onEvent("mainButtonClicked", function(){
+            tg.sendData(selectedCar);
+        });
+
+        let usercard = document.getElementById("usercard");
+        let p = document.createElement("p");
+        p.innerText = `${tg.initDataUnsafe.user.first_name} ${tg.initDataUnsafe.user.last_name}`;
+        usercard.appendChild(p);
+    </script>
 </body>
 </html>
