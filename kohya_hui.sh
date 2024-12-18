@@ -12,6 +12,7 @@ CHECKPOINT_MODELS=(
     "https://huggingface.co/black-forest-labs/FLUX.1-dev/resolve/main/flux1-dev.safetensors"
     "https://huggingface.co/comfyanonymous/flux_text_encoders/raw/main/clip_l.safetensors"
     "https://huggingface.co/comfyanonymous/flux_text_encoders/raw/main/t5xxl_fp16.safetensors"
+    "https://huggingface.co/black-forest-labs/FLUX.1-dev/raw/main/ae.safetensors"
 )
 
 ### DO NOT EDIT BELOW HERE UNLESS YOU KNOW WHAT YOU ARE DOING ###
